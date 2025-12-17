@@ -1,0 +1,72 @@
+name: Docker Build, Upload and Kubernetes Deploy
+
+on: workflow_dispatch
+
+env:
+  # Set global action env variables:
+  IMAGE_TAG: auth-service
+  KUBE_NAMESPACE: default
+
+jobs:
+  build-and-push:
+    name: Build & Push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    environment:
+      name: default
+    outputs:
+      image: ${{ steps.build.outputs.image }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push container image to GitHub Container Registry
+        id: build
+        run: |
+          IMAGE="ghcr.io/paf-it/${{ env.IMAGE_TAG }}:${{ github.sha }}"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+          docker build . --tag ${{ env.IMAGE_TAG }}
+          docker tag ${{ env.IMAGE_TAG }} $IMAGE
+          docker push $IMAGE
+
+  deploy:
+    name: Deploy
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment:
+      name: default
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set kubectl Context
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.UPCLOUD_KUBECONFIG_GATEWAY_TEST }}
+          context: ${{ env.KUBE_NAMESPACE }}
+
+      - name: Deploy to Kubernetes
+        uses: swdotcom/update-and-apply-kubernetes-configs@v1
+        with:
+          k8-config-file-paths: |
+            k8s/auth-service-configmap.yaml
+            k8s/auth-service-deployment.yaml
+          replacement-method: defined
+          namespace: ${{ env.KUBE_NAMESPACE }}
+        env:
+          IMAGE: ${{ needs.build-and-push.outputs.image }}
+          AUTH_SERVICE_DATABASE_URL: ${{ secrets.AUTH_SERVICE_DATABASE_URL }}
+          AUTH_SERVICE_DATABASE_USER: ${{ secrets.AUTH_SERVICE_DATABASE_USER }}
+          AUTH_SERVICE_DATABASE_PASSWORD: ${{ secrets.AUTH_SERVICE_DATABASE_PASSWORD }}
+          AUTH_SERVICE_DATABASE_NAME: ${{ secrets.AUTH_SERVICE_DATABASE_NAME }}

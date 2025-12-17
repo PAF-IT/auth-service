@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+model User {
+  id             String          @id @db.VarChar(32)
+  email          String          @unique
+  passwordHash   String          @db.VarChar(255)
+  OAuthAuthCodes OAuthAuthCode[]
+  OAuthTokens    OAuthToken[]
+
+  @@index([email], name: "idx_user_email")
+}
+
+enum GrantTypes {
+  client_credentials
+  authorization_code
+  refresh_token
+  implicit
+  password
+}
+
+model OAuthClient {
+  id               String             @id @default(uuid()) @db.VarChar(32)
+  name             String             @db.VarChar(255)
+  secret           String?            @db.VarChar(255)
+  redirectUris     Json
+  allowedGrants    Json
+  scopes           OAuthScope[]
+  authCodes        OAuthAuthCode[]
+  tokens           OAuthToken[]
+  OAuthClientScope OAuthClientScope[]
+}
+
+model OAuthClientScope {
+  clientId String      @db.VarChar(32)
+  client   OAuthClient @relation(fields: [clientId], references: [id])
+  scopeId  String      @db.VarChar(32)
+  scope    OAuthScope  @relation(fields: [scopeId], references: [id])
+
+  @@id([clientId, scopeId])
+  @@index([clientId], name: "idx_oauthclient_oauthscope_clientid")
+  @@index([scopeId], name: "idx_oauthclient_oauthscope_scopeid")
+  @@map("oauthClient_oauthScope")
+}
+
+enum CodeChallengeMethod {
+  S256
+  plain
+}
+
+model OAuthAuthCode {
+  code                String              @id
+  redirectUri         String?
+  codeChallenge       String?
+  codeChallengeMethod CodeChallengeMethod @default(plain)
+  expiresAt           DateTime
+  user                User?               @relation(fields: [userId], references: [id])
+  userId              String?             @db.VarChar(32)
+  client              OAuthClient         @relation(fields: [clientId], references: [id])
+  clientId            String              @db.VarChar(32)
+  scopes              OAuthScope[]
+}
+
+model OAuthToken {
+  accessToken           String       @id
+  accessTokenExpiresAt  DateTime
+  refreshToken          String?      @unique
+  refreshTokenExpiresAt DateTime?
+  client                OAuthClient  @relation(fields: [clientId], references: [id])
+  clientId              String       @db.VarChar(32)
+  user                  User?        @relation(fields: [userId], references: [id])
+  userId                String?      @db.VarChar(32)
+  scopes                OAuthScope[]
+
+  @@index([accessToken], name: "idx_oauthtoken_accesstoken")
+  @@index([refreshToken], name: "idx_oauthtoken_refreshtoken")
+}
+
+model OAuthScope {
+  id            String          @id @db.VarChar(32)
+  name          String
+  OAuthClients  OAuthClient[]
+  OAuthAuthCode OAuthAuthCode[]
+  OAuthToken    OAuthToken[]
+
+  OAuthClientScope OAuthClientScope[]
+
+  @@index([name], name: "idx_oauthscope_name")
+}
