@@ -15,7 +15,6 @@ export class TokenRepository implements OAuthTokenRepository {
         accessToken,
       },
       include: {
-        user: true,
         client: {
           include: {
             scopes: true,
@@ -47,11 +46,7 @@ export class TokenRepository implements OAuthTokenRepository {
           name: s.name,
         })),
       },
-      user: token.user ? {
-        id: token.user.id,
-        email: token.user.email,
-        passwordHash: token.user.passwordHash,
-      } : null,
+      userId: token.userId ?? undefined,
       scopes: token.scopes.map(s => ({
         name: s.name,
       })),
@@ -61,7 +56,7 @@ export class TokenRepository implements OAuthTokenRepository {
   async issueToken(client: Client, scopes: Scope[], user?: User): Promise<Token> {
     return new Token({
       accessToken: generateRandomToken(),
-      accessTokenExpiresAt: new DateInterval("2h").getEndDate(),
+      accessTokenExpiresAt: new DateInterval("7d").getEndDate(),
       refreshToken: null,
       refreshTokenExpiresAt: null,
       client,
@@ -80,7 +75,6 @@ export class TokenRepository implements OAuthTokenRepository {
           },
         },
         scopes: true,
-        user: true,
       },
     });
 
@@ -106,11 +100,7 @@ export class TokenRepository implements OAuthTokenRepository {
           name: s.name,
         })),
       },
-      user: token.user ? {
-        id: token.user.id,
-        email: token.user.email,
-        passwordHash: token.user.passwordHash,
-      } : null,
+      userId: token.userId ?? undefined,
       scopes: token.scopes.map(s => ({
         name: s.name,
       })),

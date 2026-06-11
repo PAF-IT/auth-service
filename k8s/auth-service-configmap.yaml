@@ -4,10 +4,11 @@ metadata:
   name: auth-service
 data:
   APP_URL: "gateway.pa-f.net"
-  DATABASE_URL: "${AUTH_SERVICE_DATABASE_URL}"
-  DATABASE_USER: "${AUTH_SERVICE_DATABASE_USER}"
-  DATABASE_PASSWORD: "${AUTH_SERVICE_DATABASE_PASSWORD}"
-  DATABASE_NAME: "${AUTH_SERVICE_DATABASE_NAME}"
-  DATABASE_HOST: "mysql"
-  DATABASE_PORT: "3306"
+  # Shared paf-admin MariaDB. Member rows live in `members` (owned by paf-admin),
+  # OAuth tables are owned by auth-service migrations.
+  MYSQL_HOST: "mysql"
+  MYSQL_PORT: "3306"
+  MYSQL_USER: "${AUTH_SERVICE_DATABASE_USER}"
+  MYSQL_PASSWORD: "${AUTH_SERVICE_DATABASE_PASSWORD}"
+  MYSQL_DB_NAME: "${AUTH_SERVICE_DATABASE_NAME}"
   OAUTH_CODES_SECRET: "${AUTH_SERVICE_OAUTH_CODES_SECRET}"

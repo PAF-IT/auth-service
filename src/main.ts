@@ -19,11 +19,11 @@ import {Scope} from "./entities/scope";
 
 async function bootstrap() {
     const adapter = new PrismaMariaDb({
-        host: env("DATABASE_HOST") || 'localhost',
-        user: env("DATABASE_USER"),
-        password: env("DATABASE_PASSWORD"),
-        database: env("DATABASE_NAME"),
-        port: parseInt(env("DATABASE_PORT") || '3306'),
+        host: env("MYSQL_HOST") || 'localhost',
+        user: env("MYSQL_USER"),
+        password: env("MYSQL_PASSWORD"),
+        database: env("MYSQL_DB_NAME"),
+        port: parseInt(env("MYSQL_PORT") || '3306'),
         connectionLimit: 10
     });
     const prisma = new PrismaClient({adapter});
@@ -59,7 +59,7 @@ async function bootstrap() {
     );
 
     authorizationServer.enableGrantTypes(
-        [{grant: magicLinkGrant}, new DateInterval("15m")]
+        [{grant: magicLinkGrant}, new DateInterval("1h")]
     );
 
     const app = Express();
@@ -112,8 +112,13 @@ async function bootstrap() {
                 // Create magic token
                 const token = await magicLinkTokenRepository.issueAuthCode(client, user, scopes);
 
-                // Generate magic link
-                const magicLink = `${env("APP_URL")}/auth/magic-link/verify?token=${token.code}`;
+                // Generate magic link — points at the client app's first registered
+                // redirect URI; the client exchanges the token via POST /token.
+                const redirects = client.redirectUris as string[];
+                if (!redirects?.length) {
+                    throw new Error(`OAuthClient ${client.id} has no redirectUris`);
+                }
+                const magicLink = `${redirects[0]}?token=${token.code}`;
                 console.log("[DEBUG] /auth/magic-link/send: magicLink=", magicLink);
 
                 // Send email

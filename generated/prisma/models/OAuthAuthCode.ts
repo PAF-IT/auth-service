@@ -198,7 +198,6 @@ export type OAuthAuthCodeWhereInput = {
   expiresAt?: Prisma.DateTimeFilter<"OAuthAuthCode"> | Date | string
   userId?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
   clientId?: Prisma.StringFilter<"OAuthAuthCode"> | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   client?: Prisma.XOR<Prisma.OAuthClientScalarRelationFilter, Prisma.OAuthClientWhereInput>
   scopes?: Prisma.OAuthScopeListRelationFilter
 }
@@ -211,7 +210,6 @@ export type OAuthAuthCodeOrderByWithRelationInput = {
   expiresAt?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   clientId?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   client?: Prisma.OAuthClientOrderByWithRelationInput
   scopes?: Prisma.OAuthScopeOrderByRelationAggregateInput
   _relevance?: Prisma.OAuthAuthCodeOrderByRelevanceInput
@@ -228,7 +226,6 @@ export type OAuthAuthCodeWhereUniqueInput = Prisma.AtLeast<{
   expiresAt?: Prisma.DateTimeFilter<"OAuthAuthCode"> | Date | string
   userId?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
   clientId?: Prisma.StringFilter<"OAuthAuthCode"> | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   client?: Prisma.XOR<Prisma.OAuthClientScalarRelationFilter, Prisma.OAuthClientWhereInput>
   scopes?: Prisma.OAuthScopeListRelationFilter
 }, "code">
@@ -265,7 +262,7 @@ export type OAuthAuthCodeCreateInput = {
   codeChallenge?: string | null
   codeChallengeMethod?: $Enums.CodeChallengeMethod
   expiresAt: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutOAuthAuthCodesInput
+  userId?: string | null
   client: Prisma.OAuthClientCreateNestedOneWithoutAuthCodesInput
   scopes?: Prisma.OAuthScopeCreateNestedManyWithoutOAuthAuthCodeInput
 }
@@ -287,7 +284,7 @@ export type OAuthAuthCodeUpdateInput = {
   codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutOAuthAuthCodesNestedInput
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.OAuthClientUpdateOneRequiredWithoutAuthCodesNestedInput
   scopes?: Prisma.OAuthScopeUpdateManyWithoutOAuthAuthCodeNestedInput
 }
@@ -319,6 +316,7 @@ export type OAuthAuthCodeUpdateManyMutationInput = {
   codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OAuthAuthCodeUncheckedUpdateManyInput = {
@@ -375,48 +373,6 @@ export type OAuthAuthCodeMinOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
-}
-
-export type OAuthAuthCodeCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput> | Prisma.OAuthAuthCodeCreateWithoutUserInput[] | Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput | Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.OAuthAuthCodeCreateManyUserInputEnvelope
-  connect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-}
-
-export type OAuthAuthCodeUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput> | Prisma.OAuthAuthCodeCreateWithoutUserInput[] | Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput | Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.OAuthAuthCodeCreateManyUserInputEnvelope
-  connect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-}
-
-export type OAuthAuthCodeUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput> | Prisma.OAuthAuthCodeCreateWithoutUserInput[] | Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput | Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.OAuthAuthCodeUpsertWithWhereUniqueWithoutUserInput | Prisma.OAuthAuthCodeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.OAuthAuthCodeCreateManyUserInputEnvelope
-  set?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  disconnect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  delete?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  connect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  update?: Prisma.OAuthAuthCodeUpdateWithWhereUniqueWithoutUserInput | Prisma.OAuthAuthCodeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.OAuthAuthCodeUpdateManyWithWhereWithoutUserInput | Prisma.OAuthAuthCodeUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
-}
-
-export type OAuthAuthCodeUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput> | Prisma.OAuthAuthCodeCreateWithoutUserInput[] | Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput | Prisma.OAuthAuthCodeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.OAuthAuthCodeUpsertWithWhereUniqueWithoutUserInput | Prisma.OAuthAuthCodeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.OAuthAuthCodeCreateManyUserInputEnvelope
-  set?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  disconnect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  delete?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  connect?: Prisma.OAuthAuthCodeWhereUniqueInput | Prisma.OAuthAuthCodeWhereUniqueInput[]
-  update?: Prisma.OAuthAuthCodeUpdateWithWhereUniqueWithoutUserInput | Prisma.OAuthAuthCodeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.OAuthAuthCodeUpdateManyWithWhereWithoutUserInput | Prisma.OAuthAuthCodeUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
 }
 
 export type OAuthAuthCodeCreateNestedManyWithoutClientInput = {
@@ -507,72 +463,13 @@ export type OAuthAuthCodeUncheckedUpdateManyWithoutScopesNestedInput = {
   deleteMany?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
 }
 
-export type OAuthAuthCodeCreateWithoutUserInput = {
-  code: string
-  redirectUri?: string | null
-  codeChallenge?: string | null
-  codeChallengeMethod?: $Enums.CodeChallengeMethod
-  expiresAt: Date | string
-  client: Prisma.OAuthClientCreateNestedOneWithoutAuthCodesInput
-  scopes?: Prisma.OAuthScopeCreateNestedManyWithoutOAuthAuthCodeInput
-}
-
-export type OAuthAuthCodeUncheckedCreateWithoutUserInput = {
-  code: string
-  redirectUri?: string | null
-  codeChallenge?: string | null
-  codeChallengeMethod?: $Enums.CodeChallengeMethod
-  expiresAt: Date | string
-  clientId: string
-  scopes?: Prisma.OAuthScopeUncheckedCreateNestedManyWithoutOAuthAuthCodeInput
-}
-
-export type OAuthAuthCodeCreateOrConnectWithoutUserInput = {
-  where: Prisma.OAuthAuthCodeWhereUniqueInput
-  create: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput>
-}
-
-export type OAuthAuthCodeCreateManyUserInputEnvelope = {
-  data: Prisma.OAuthAuthCodeCreateManyUserInput | Prisma.OAuthAuthCodeCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type OAuthAuthCodeUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.OAuthAuthCodeWhereUniqueInput
-  update: Prisma.XOR<Prisma.OAuthAuthCodeUpdateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.OAuthAuthCodeCreateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedCreateWithoutUserInput>
-}
-
-export type OAuthAuthCodeUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.OAuthAuthCodeWhereUniqueInput
-  data: Prisma.XOR<Prisma.OAuthAuthCodeUpdateWithoutUserInput, Prisma.OAuthAuthCodeUncheckedUpdateWithoutUserInput>
-}
-
-export type OAuthAuthCodeUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.OAuthAuthCodeScalarWhereInput
-  data: Prisma.XOR<Prisma.OAuthAuthCodeUpdateManyMutationInput, Prisma.OAuthAuthCodeUncheckedUpdateManyWithoutUserInput>
-}
-
-export type OAuthAuthCodeScalarWhereInput = {
-  AND?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
-  OR?: Prisma.OAuthAuthCodeScalarWhereInput[]
-  NOT?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
-  code?: Prisma.StringFilter<"OAuthAuthCode"> | string
-  redirectUri?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
-  codeChallenge?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
-  codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFilter<"OAuthAuthCode"> | $Enums.CodeChallengeMethod
-  expiresAt?: Prisma.DateTimeFilter<"OAuthAuthCode"> | Date | string
-  userId?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
-  clientId?: Prisma.StringFilter<"OAuthAuthCode"> | string
-}
-
 export type OAuthAuthCodeCreateWithoutClientInput = {
   code: string
   redirectUri?: string | null
   codeChallenge?: string | null
   codeChallengeMethod?: $Enums.CodeChallengeMethod
   expiresAt: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutOAuthAuthCodesInput
+  userId?: string | null
   scopes?: Prisma.OAuthScopeCreateNestedManyWithoutOAuthAuthCodeInput
 }
 
@@ -612,13 +509,26 @@ export type OAuthAuthCodeUpdateManyWithWhereWithoutClientInput = {
   data: Prisma.XOR<Prisma.OAuthAuthCodeUpdateManyMutationInput, Prisma.OAuthAuthCodeUncheckedUpdateManyWithoutClientInput>
 }
 
+export type OAuthAuthCodeScalarWhereInput = {
+  AND?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
+  OR?: Prisma.OAuthAuthCodeScalarWhereInput[]
+  NOT?: Prisma.OAuthAuthCodeScalarWhereInput | Prisma.OAuthAuthCodeScalarWhereInput[]
+  code?: Prisma.StringFilter<"OAuthAuthCode"> | string
+  redirectUri?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
+  codeChallenge?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
+  codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFilter<"OAuthAuthCode"> | $Enums.CodeChallengeMethod
+  expiresAt?: Prisma.DateTimeFilter<"OAuthAuthCode"> | Date | string
+  userId?: Prisma.StringNullableFilter<"OAuthAuthCode"> | string | null
+  clientId?: Prisma.StringFilter<"OAuthAuthCode"> | string
+}
+
 export type OAuthAuthCodeCreateWithoutScopesInput = {
   code: string
   redirectUri?: string | null
   codeChallenge?: string | null
   codeChallengeMethod?: $Enums.CodeChallengeMethod
   expiresAt: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutOAuthAuthCodesInput
+  userId?: string | null
   client: Prisma.OAuthClientCreateNestedOneWithoutAuthCodesInput
 }
 
@@ -653,44 +563,6 @@ export type OAuthAuthCodeUpdateManyWithWhereWithoutScopesInput = {
   data: Prisma.XOR<Prisma.OAuthAuthCodeUpdateManyMutationInput, Prisma.OAuthAuthCodeUncheckedUpdateManyWithoutScopesInput>
 }
 
-export type OAuthAuthCodeCreateManyUserInput = {
-  code: string
-  redirectUri?: string | null
-  codeChallenge?: string | null
-  codeChallengeMethod?: $Enums.CodeChallengeMethod
-  expiresAt: Date | string
-  clientId: string
-}
-
-export type OAuthAuthCodeUpdateWithoutUserInput = {
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
-  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  client?: Prisma.OAuthClientUpdateOneRequiredWithoutAuthCodesNestedInput
-  scopes?: Prisma.OAuthScopeUpdateManyWithoutOAuthAuthCodeNestedInput
-}
-
-export type OAuthAuthCodeUncheckedUpdateWithoutUserInput = {
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
-  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
-  scopes?: Prisma.OAuthScopeUncheckedUpdateManyWithoutOAuthAuthCodeNestedInput
-}
-
-export type OAuthAuthCodeUncheckedUpdateManyWithoutUserInput = {
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  redirectUri?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
-  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  clientId?: Prisma.StringFieldUpdateOperationsInput | string
-}
-
 export type OAuthAuthCodeCreateManyClientInput = {
   code: string
   redirectUri?: string | null
@@ -706,7 +578,7 @@ export type OAuthAuthCodeUpdateWithoutClientInput = {
   codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutOAuthAuthCodesNestedInput
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scopes?: Prisma.OAuthScopeUpdateManyWithoutOAuthAuthCodeNestedInput
 }
 
@@ -735,7 +607,7 @@ export type OAuthAuthCodeUpdateWithoutScopesInput = {
   codeChallenge?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   codeChallengeMethod?: Prisma.EnumCodeChallengeMethodFieldUpdateOperationsInput | $Enums.CodeChallengeMethod
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutOAuthAuthCodesNestedInput
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   client?: Prisma.OAuthClientUpdateOneRequiredWithoutAuthCodesNestedInput
 }
 
@@ -798,7 +670,6 @@ export type OAuthAuthCodeSelect<ExtArgs extends runtime.Types.Extensions.Interna
   expiresAt?: boolean
   userId?: boolean
   clientId?: boolean
-  user?: boolean | Prisma.OAuthAuthCode$userArgs<ExtArgs>
   client?: boolean | Prisma.OAuthClientDefaultArgs<ExtArgs>
   scopes?: boolean | Prisma.OAuthAuthCode$scopesArgs<ExtArgs>
   _count?: boolean | Prisma.OAuthAuthCodeCountOutputTypeDefaultArgs<ExtArgs>
@@ -818,7 +689,6 @@ export type OAuthAuthCodeSelectScalar = {
 
 export type OAuthAuthCodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"code" | "redirectUri" | "codeChallenge" | "codeChallengeMethod" | "expiresAt" | "userId" | "clientId", ExtArgs["result"]["oAuthAuthCode"]>
 export type OAuthAuthCodeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.OAuthAuthCode$userArgs<ExtArgs>
   client?: boolean | Prisma.OAuthClientDefaultArgs<ExtArgs>
   scopes?: boolean | Prisma.OAuthAuthCode$scopesArgs<ExtArgs>
   _count?: boolean | Prisma.OAuthAuthCodeCountOutputTypeDefaultArgs<ExtArgs>
@@ -827,7 +697,6 @@ export type OAuthAuthCodeInclude<ExtArgs extends runtime.Types.Extensions.Intern
 export type $OAuthAuthCodePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OAuthAuthCode"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
     client: Prisma.$OAuthClientPayload<ExtArgs>
     scopes: Prisma.$OAuthScopePayload<ExtArgs>[]
   }
@@ -1179,7 +1048,6 @@ readonly fields: OAuthAuthCodeFieldRefs;
  */
 export interface Prisma__OAuthAuthCodeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.OAuthAuthCode$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OAuthAuthCode$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.OAuthClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OAuthClientDefaultArgs<ExtArgs>>): Prisma.Prisma__OAuthClientClient<runtime.Types.Result.GetResult<Prisma.$OAuthClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   scopes<T extends Prisma.OAuthAuthCode$scopesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OAuthAuthCode$scopesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthScopePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1558,25 +1426,6 @@ export type OAuthAuthCodeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many OAuthAuthCodes to delete.
    */
   limit?: number
-}
-
-/**
- * OAuthAuthCode.user
- */
-export type OAuthAuthCode$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

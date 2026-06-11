@@ -10,6 +10,7 @@ import { User } from "./user";
 
 type Optional = Partial<{
   user: OAuthUser;
+  userId: string;
   scopes: OAuthScope[];
 }>;
 
@@ -30,13 +31,13 @@ export class AuthCode implements OAuthAuthCode {
   createdAt: Date;
   scopes: Scope[];
 
-  constructor({ user, client, scopes, ...entity }: OAuthAuthCode & Required & Optional) {
+  constructor({ user, userId, client, scopes, ...entity }: OAuthAuthCode & Required & Optional) {
     this.code = entity.code;
     this.codeChallenge = entity.codeChallenge ? entity.codeChallenge : undefined;
     this.codeChallengeMethod = entity.codeChallengeMethod ? entity.codeChallengeMethod : undefined;
     this.redirectUri = entity.redirectUri ? entity.redirectUri : undefined;
     this.user = user ? new User(user) : undefined;
-    this.userId = user?.id;
+    this.userId = (user?.id as string | undefined) ?? userId;
     this.client = new Client(client);
     this.clientId = client.id;
     this.scopes = scopes?.map(s => new Scope(s)) ?? [];

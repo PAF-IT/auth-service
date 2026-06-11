@@ -19,7 +19,6 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
             scopes: true,
           },
         },
-        user: true,
         scopes: true,
       },
     });
@@ -47,10 +46,7 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
           name: s.name,
         })),
       },
-      user: entity.user ? {
-        id: entity.user.id,
-        email: entity.user.email,
-      } : undefined,
+      userId: entity.userId ?? undefined,
       scopes: entity.scopes.map(s => ({
         name: s.name,
       })),

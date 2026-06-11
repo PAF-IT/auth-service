@@ -10,14 +10,18 @@ generator client {
   output   = "../generated/prisma"
 }
 
-model User {
-  id             String          @id @db.VarChar(32)
-  email          String          @unique
-  passwordHash   String          @db.VarChar(255)
-  OAuthAuthCodes OAuthAuthCode[]
-  OAuthTokens    OAuthToken[]
+// `members` is a read-only VIEW in auth-service's DB (defined by migration
+// 20260612_members_view) that selects from `paf-admin`.`members` on the
+// same MariaDB server. Do NOT add Prisma relations from OAuth tables to Member,
+// and do NOT let `prisma migrate` generate DDL for this model — Prisma can't
+// tell a view from a table; any `CREATE TABLE members` it suggests must be
+// stripped from generated migrations.
+model Member {
+  id    Int    @id @db.UnsignedInt
+  email String @db.VarChar(128)
+  name  String @db.VarChar(128)
 
-  @@index([email], name: "idx_user_email")
+  @@map("members")
 }
 
 enum GrantTypes {
@@ -63,7 +67,6 @@ model OAuthAuthCode {
   codeChallenge       String?
   codeChallengeMethod CodeChallengeMethod @default(plain)
   expiresAt           DateTime
-  user                User?               @relation(fields: [userId], references: [id])
   userId              String?             @db.VarChar(32)
   client              OAuthClient         @relation(fields: [clientId], references: [id])
   clientId            String              @db.VarChar(32)
@@ -77,7 +80,6 @@ model OAuthToken {
   refreshTokenExpiresAt DateTime?
   client                OAuthClient  @relation(fields: [clientId], references: [id])
   clientId              String       @db.VarChar(32)
-  user                  User?        @relation(fields: [userId], references: [id])
   userId                String?      @db.VarChar(32)
   scopes                OAuthScope[]
 

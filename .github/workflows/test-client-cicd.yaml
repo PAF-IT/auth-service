@@ -1,10 +1,9 @@
-name: Docker Build, Upload and Kubernetes Deploy
+name: Test Client - Docker Build, Upload and Kubernetes Deploy
 
 on: workflow_dispatch
 
 env:
-  # Set global action env variables:
-  IMAGE_TAG: auth-service
+  IMAGE_TAG: test-client
   KUBE_NAMESPACE: staging
 
 jobs:
@@ -35,7 +34,7 @@ jobs:
         run: |
           IMAGE="ghcr.io/paf-it/${{ env.IMAGE_TAG }}:${{ github.sha }}"
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
-          docker build . --tag ${{ env.IMAGE_TAG }}
+          docker build test-client --tag ${{ env.IMAGE_TAG }}
           docker tag ${{ env.IMAGE_TAG }} $IMAGE
           docker push $IMAGE
 
@@ -60,13 +59,13 @@ jobs:
         uses: swdotcom/update-and-apply-kubernetes-configs@v1
         with:
           k8-config-file-paths: |
-            k8s/auth-service-configmap.yaml
-            k8s/auth-service-deployment.yaml
+            k8s/test-client-configmap.yaml
+            k8s/test-client-deployment.yaml
+            k8s/test-client-service.yaml
           replacement-method: defined
           namespace: ${{ env.KUBE_NAMESPACE }}
         env:
           IMAGE: ${{ needs.build-and-push.outputs.image }}
-          AUTH_SERVICE_DATABASE_USER: ${{ secrets.AUTH_SERVICE_DATABASE_USER }}
-          AUTH_SERVICE_DATABASE_PASSWORD: ${{ secrets.AUTH_SERVICE_DATABASE_PASSWORD }}
-          AUTH_SERVICE_DATABASE_NAME: ${{ secrets.AUTH_SERVICE_DATABASE_NAME }}
-          AUTH_SERVICE_OAUTH_CODES_SECRET: ${{ secrets.OAUTH_CODES_SECRET }}
+          TEST_CLIENT_OAUTH_CLIENT_ID: ${{ secrets.TEST_CLIENT_OAUTH_CLIENT_ID }}
+          TEST_CLIENT_OAUTH_CLIENT_SECRET: ${{ secrets.TEST_CLIENT_OAUTH_CLIENT_SECRET }}
+          TEST_CLIENT_COOKIE_SECRET: ${{ secrets.TEST_CLIENT_COOKIE_SECRET }}
