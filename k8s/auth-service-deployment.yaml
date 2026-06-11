@@ -19,72 +19,78 @@ spec:
         - name: migrate
           image: ${IMAGE}
           command: ["sh", "-c", "npx prisma migrate deploy && pnpm run seed"]
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_URL
-            - name: DATABASE_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_USER
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_PASSWORD
-            - name: DATABASE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_NAME
-            - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_HOST
-            - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_PORT
+          envFrom:
+            - configMapRef:
+                name: auth-service
+#          env:
+#            - name: DATABASE_URL
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_URL
+#            - name: DATABASE_USER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_USER
+#            - name: DATABASE_PASSWORD
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_PASSWORD
+#            - name: DATABASE_NAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_NAME
+#            - name: DATABASE_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_HOST
+#            - name: DATABASE_PORT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_PORT
       containers:
         - name: auth-service
           image: ${IMAGE}
           command: ["sh", "-c", "pnpm run prod"]
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_URL
-            - name: DATABASE_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_USER
-            - name: DATABASE_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_PASSWORD
-            - name: DATABASE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_NAME
-            - name: DATABASE_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_HOST
-            - name: DATABASE_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: auth-service
-                  key: AUTH_SERVICE_DATABASE_PORT
+          envFrom:
+            - configMapRef:
+                name: auth-service
+#          env:
+#            - name: DATABASE_URL
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_URL
+#            - name: DATABASE_USER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_USER
+#            - name: DATABASE_PASSWORD
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_PASSWORD
+#            - name: DATABASE_NAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_NAME
+#            - name: DATABASE_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_HOST
+#            - name: DATABASE_PORT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: auth-service
+#                  key: AUTH_SERVICE_DATABASE_PORT
           ports:
             - containerPort: 3000
               name: auth-service

@@ -96,10 +96,10 @@ async function bootstrap() {
 
     app.post("/auth/magic-link/send", async (req: Express.Request, res: Express.Response) => {
         try {
-            console.log("/auth/magic-link/send req=" + JSON.stringify(req.body));
+            console.log("[DEBUG] /auth/magic-link/send req=" + JSON.stringify(req.body));
             const { email, clientId } = req.body;
             const user = await userRepository.getUserByEmail(email);
-            console.log("/auth/magic-link/send user=" + user);
+            console.log("[DEBUG] /auth/magic-link/send user=" + user);
 
             const client = await clientRepository.getByIdentifier(clientId)
 
@@ -113,8 +113,8 @@ async function bootstrap() {
                 const token = await magicLinkTokenRepository.issueAuthCode(client, user, scopes);
 
                 // Generate magic link
-                const magicLink = `${process.env.APP_URL}/auth/magic-link/verify?token=${token.code}`;
-                console.log("/auth/magic-link/send: magicLink=", magicLink);
+                const magicLink = `${env("APP_URL")}/auth/magic-link/verify?token=${token.code}`;
+                console.log("[DEBUG] /auth/magic-link/send: magicLink=", magicLink);
 
                 // Send email
                 // await emailService.send({
@@ -159,7 +159,7 @@ async function bootstrap() {
     });
 
     app.listen(3000);
-    console.log("app is listening on http://localhost:3000");
+    console.log(`[INFO] app is listening on ${env("APP_URL")}`);
 }
 
 bootstrap().catch(console.log);
