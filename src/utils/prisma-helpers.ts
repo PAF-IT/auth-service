@@ -1,24 +1,25 @@
 import { GrantIdentifier } from "@jmondi/oauth2-server";
 import { Prisma } from "../../generated/prisma/client.js";
 
-/**
- * Safely parse redirectUris from Prisma JSON field to string array
- */
-export function parseRedirectUris(value: Prisma.JsonValue): string[] {
-  if (Array.isArray(value)) {
-    return value.filter((v): v is string => typeof v === "string");
+// Accept either a real JSON array (the correct shape) or a JSON-encoded
+// string (legacy rows from when seed.ts/manage-clients.ts double-encoded).
+function coerceArray(value: Prisma.JsonValue): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed;
+    } catch { /* fall through */ }
   }
   return [];
 }
 
-/**
- * Safely parse allowedGrants from Prisma JSON field to GrantIdentifier array
- */
+export function parseRedirectUris(value: Prisma.JsonValue): string[] {
+  return coerceArray(value).filter((v): v is string => typeof v === "string");
+}
+
 export function parseAllowedGrants(value: Prisma.JsonValue): GrantIdentifier[] {
-  if (Array.isArray(value)) {
-    return value.filter((v): v is GrantIdentifier => typeof v === "string");
-  }
-  return [];
+  return coerceArray(value).filter((v): v is GrantIdentifier => typeof v === "string");
 }
 
 /**

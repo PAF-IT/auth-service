@@ -82,13 +82,13 @@ async function main() {
           where: {id},
           update: {
             name, secret,
-            redirectUris: JSON.stringify(redirectUris),
-            allowedGrants: JSON.stringify(allowedGrants),
+            redirectUris,
+            allowedGrants,
           },
           create: {
             id, name, secret,
-            redirectUris: JSON.stringify(redirectUris),
-            allowedGrants: JSON.stringify(allowedGrants),
+            redirectUris,
+            allowedGrants,
           },
         });
         console.log(`upserted OAuthClient id=${id}`);
