@@ -11,8 +11,8 @@ generator client {
 }
 
 // `members` is a read-only VIEW in auth-service's DB (defined by migration
-// 20260612_members_view) that selects from `paf_admin.members` on the same
-// MariaDB server. Do NOT add Prisma relations from OAuth tables to Member,
+// 20260612_members_view) that selects from `paf-admin`.`members` on the
+// same MariaDB server. Do NOT add Prisma relations from OAuth tables to Member,
 // and do NOT let `prisma migrate` generate DDL for this model — Prisma can't
 // tell a view from a table; any `CREATE TABLE members` it suggests must be
 // stripped from generated migrations.

@@ -2,10 +2,11 @@
 -- lives in a different database on the same MariaDB server. Re-runnable
 -- via CREATE OR REPLACE.
 --
--- Prereq: the auth-service DB user must have SELECT on paf_admin.members:
---   GRANT SELECT ON paf_admin.members TO '<auth_user>'@'%';
+-- Prereqs (run once by a DBA, NOT auth-service's user):
+--   GRANT CREATE VIEW, SHOW VIEW ON `<auth_db>`.* TO '<auth_user>'@'%';
+--   GRANT SELECT ON `paf-admin`.`members` TO '<auth_user>'@'%';
+--   FLUSH PRIVILEGES;
 --
--- If paf-admin's database is named something other than `paf_admin`, update
--- this migration (and re-apply) accordingly.
+-- DB name is literally `paf-admin` (with a hyphen) — must be backtick-quoted.
 CREATE OR REPLACE VIEW `members` AS
-  SELECT `id`, `email`, `name` FROM `paf_admin`.`members`;
+  SELECT `id`, `email`, `name` FROM `paf-admin`.`members`;
