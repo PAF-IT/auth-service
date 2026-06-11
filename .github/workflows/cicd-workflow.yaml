@@ -66,7 +66,6 @@ jobs:
           namespace: ${{ env.KUBE_NAMESPACE }}
         env:
           IMAGE: ${{ needs.build-and-push.outputs.image }}
-          AUTH_SERVICE_DATABASE_URL: ${{ secrets.AUTH_SERVICE_DATABASE_URL }}
           AUTH_SERVICE_DATABASE_USER: ${{ secrets.AUTH_SERVICE_DATABASE_USER }}
           AUTH_SERVICE_DATABASE_PASSWORD: ${{ secrets.AUTH_SERVICE_DATABASE_PASSWORD }}
           AUTH_SERVICE_DATABASE_NAME: ${{ secrets.AUTH_SERVICE_DATABASE_NAME }}

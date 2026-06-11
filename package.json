@@ -4,7 +4,8 @@
 	"scripts": {
 		"gen": "prisma generate",
 		"dev": "tsx watch src/main.ts",
-		"prod": "tsx src/main.ts"
+		"prod": "tsx src/main.ts",
+		"client": "tsx prisma/manage-clients.ts"
 	},
 	"type": "module",
 	"engines": {
