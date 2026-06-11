@@ -51,7 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User',
+  Member: 'Member',
   OAuthClient: 'OAuthClient',
   OAuthClientScope: 'OAuthClientScope',
   OAuthAuthCode: 'OAuthAuthCode',
@@ -75,13 +75,13 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const UserScalarFieldEnum = {
+export const MemberScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  passwordHash: 'passwordHash'
+  name: 'name'
 } as const
 
-export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
 
 
 export const OAuthClientScalarFieldEnum = {
@@ -151,13 +151,12 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-export const UserOrderByRelevanceFieldEnum = {
-  id: 'id',
+export const MemberOrderByRelevanceFieldEnum = {
   email: 'email',
-  passwordHash: 'passwordHash'
+  name: 'name'
 } as const
 
-export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+export type MemberOrderByRelevanceFieldEnum = (typeof MemberOrderByRelevanceFieldEnum)[keyof typeof MemberOrderByRelevanceFieldEnum]
 
 
 export const JsonNullValueFilter = {

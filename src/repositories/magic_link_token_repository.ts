@@ -20,7 +20,6 @@ export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
                         scopes: true,
                     },
                 },
-                user: true,
                 scopes: true,
             },
         });
@@ -38,6 +37,7 @@ export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
             codeChallenge: entity.codeChallenge ?? undefined,
             codeChallengeMethod: entity.codeChallengeMethod as "S256" | "plain",
             expiresAt: entity.expiresAt,
+            userId: entity.userId ?? undefined,
             client: {
                 id: entity.client.id,
                 name: entity.client.name,
@@ -48,10 +48,6 @@ export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
                     name: s.name,
                 })),
             },
-            user: entity.user ? {
-                id: entity.user.id,
-                email: entity.user.email,
-            } : undefined,
             scopes: entity.scopes.map(s => ({
                 name: s.name,
             })),

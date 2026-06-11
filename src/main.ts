@@ -19,11 +19,11 @@ import {Scope} from "./entities/scope";
 
 async function bootstrap() {
     const adapter = new PrismaMariaDb({
-        host: env("DATABASE_HOST") || 'localhost',
-        user: env("DATABASE_USER"),
-        password: env("DATABASE_PASSWORD"),
-        database: env("DATABASE_NAME"),
-        port: parseInt(env("DATABASE_PORT") || '3306'),
+        host: env("MYSQL_HOST") || 'localhost',
+        user: env("MYSQL_USER"),
+        password: env("MYSQL_PASSWORD"),
+        database: env("MYSQL_DB_NAME"),
+        port: parseInt(env("MYSQL_PORT") || '3306'),
         connectionLimit: 10
     });
     const prisma = new PrismaClient({adapter});

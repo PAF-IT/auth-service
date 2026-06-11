@@ -10,6 +10,7 @@ import { User } from "./user.js";
 
 type Relations = Partial<{
   user: UserModel | null;
+  userId: string | null;
   scopes: ScopeModel[] | null;
 }>;
 
@@ -29,13 +30,13 @@ export class Token implements TokenModel, OAuthToken {
   scopes: Scope[];
   createdAt: Date;
 
-  constructor({ client, user, scopes, ...entity }: TokenModel & Required & Relations) {
+  constructor({ client, user, userId, scopes, ...entity }: TokenModel & Required & Relations) {
     this.accessToken = entity.accessToken;
     this.accessTokenExpiresAt = entity.accessTokenExpiresAt;
     this.refreshToken = entity.refreshToken ? entity.refreshToken : null;
     this.refreshTokenExpiresAt = entity.refreshTokenExpiresAt ? entity.refreshTokenExpiresAt : null;
     this.user = user ? new User(user) : null;
-    this.userId = user?.id ?? null;
+    this.userId = (user?.id as string | null | undefined) ?? userId ?? null;
     this.client = new Client(client);
     this.clientId = client.id;
     this.scopes = scopes?.map(s => new Scope(s)) ?? [];

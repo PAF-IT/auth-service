@@ -10,14 +10,16 @@ generator client {
   output   = "../generated/prisma"
 }
 
-model User {
-  id             String          @id @db.VarChar(32)
-  email          String          @unique
-  passwordHash   String          @db.VarChar(255)
-  OAuthAuthCodes OAuthAuthCode[]
-  OAuthTokens    OAuthToken[]
+// `members` is owned by the paf-admin service; auth-service only reads it.
+// Do NOT add Prisma relations from OAuth tables to Member, and do NOT let
+// `prisma migrate` generate DDL for this table — strip any `CREATE TABLE members`
+// from generated migrations before applying.
+model Member {
+  id    Int    @id @db.UnsignedInt
+  email String @db.VarChar(128)
+  name  String @db.VarChar(128)
 
-  @@index([email], name: "idx_user_email")
+  @@map("members")
 }
 
 enum GrantTypes {
@@ -63,7 +65,6 @@ model OAuthAuthCode {
   codeChallenge       String?
   codeChallengeMethod CodeChallengeMethod @default(plain)
   expiresAt           DateTime
-  user                User?               @relation(fields: [userId], references: [id])
   userId              String?             @db.VarChar(32)
   client              OAuthClient         @relation(fields: [clientId], references: [id])
   clientId            String              @db.VarChar(32)
@@ -77,7 +78,6 @@ model OAuthToken {
   refreshTokenExpiresAt DateTime?
   client                OAuthClient  @relation(fields: [clientId], references: [id])
   clientId              String       @db.VarChar(32)
-  user                  User?        @relation(fields: [userId], references: [id])
   userId                String?      @db.VarChar(32)
   scopes                OAuthScope[]
 
