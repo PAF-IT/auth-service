@@ -59,7 +59,7 @@ async function bootstrap() {
     );
 
     authorizationServer.enableGrantTypes(
-        [{grant: magicLinkGrant}, new DateInterval("15m")]
+        [{grant: magicLinkGrant}, new DateInterval("1h")]
     );
 
     const app = Express();

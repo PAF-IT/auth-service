@@ -56,7 +56,7 @@ export class TokenRepository implements OAuthTokenRepository {
   async issueToken(client: Client, scopes: Scope[], user?: User): Promise<Token> {
     return new Token({
       accessToken: generateRandomToken(),
-      accessTokenExpiresAt: new DateInterval("2h").getEndDate(),
+      accessTokenExpiresAt: new DateInterval("7d").getEndDate(),
       refreshToken: null,
       refreshTokenExpiresAt: null,
       client,

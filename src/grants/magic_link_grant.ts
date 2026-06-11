@@ -58,17 +58,12 @@ export class MagicLinkGrant extends AbstractGrant {
             throw OAuthException.invalidGrant();
         }
 
-        // Issue access token
+        // Issue access token (library persists internally).
         const accessToken = await this.issueAccessToken(
-            new DateInterval("1h"),
+            new DateInterval("7d"),
             entities.client,
             entities.user
         );
-
-        // Persist so /token/introspect, refresh, and revoke can find it later.
-        // TokenRepository.persist uses upsert, so this stays safe even if a
-        // future library version starts persisting in issueAccessToken.
-        await this.tokenRepository.persist(accessToken);
 
         return this.makeBearerTokenResponse(entities.client, accessToken);
     }

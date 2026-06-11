@@ -60,7 +60,7 @@ export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
             code: generateRandomToken(),
             codeChallenge: null,
             codeChallengeMethod: "S256",
-            expiresAt: new DateInterval("15m").getEndDate(),
+            expiresAt: new DateInterval("1h").getEndDate(),
             client,
             user,
             scopes,
