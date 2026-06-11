@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-client
+spec:
+  selector:
+    matchLabels:
+      app: test-client
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: test-client
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: test-client
+          image: ${IMAGE}
+          command: ["sh", "-c", "pnpm run prod"]
+          envFrom:
+            - configMapRef:
+                name: test-client
+          ports:
+            - containerPort: 3000
+              name: http

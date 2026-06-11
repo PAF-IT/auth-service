@@ -112,8 +112,13 @@ async function bootstrap() {
                 // Create magic token
                 const token = await magicLinkTokenRepository.issueAuthCode(client, user, scopes);
 
-                // Generate magic link
-                const magicLink = `${env("APP_URL")}/auth/magic-link/verify?token=${token.code}`;
+                // Generate magic link — points at the client app's first registered
+                // redirect URI; the client exchanges the token via POST /token.
+                const redirects = client.redirectUris as string[];
+                if (!redirects?.length) {
+                    throw new Error(`OAuthClient ${client.id} has no redirectUris`);
+                }
+                const magicLink = `${redirects[0]}?token=${token.code}`;
                 console.log("[DEBUG] /auth/magic-link/send: magicLink=", magicLink);
 
                 // Send email
