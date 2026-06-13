@@ -24,7 +24,7 @@ export class UserRepository implements OAuthUserRepository {
       return null;
     }
 
-    return new User({id: String(member.id), email: member.email});
+    return new User({id: String(member.id), email: member.email, sciMember: !!member.sci_member});
   }
 
   async getUserByEmail(email: string): Promise<User> {
@@ -36,6 +36,6 @@ export class UserRepository implements OAuthUserRepository {
       return null;
     }
 
-    return new User({id: String(member.id), email: member.email});
+    return new User({id: String(member.id), email: member.email, sciMember: !!member.sci_member});
   }
 }
