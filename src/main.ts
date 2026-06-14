@@ -4,6 +4,7 @@ import { PrismaClient } from "../generated/prisma/client";
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { Logger, ILogObj } from "tslog";
 import Express from "express";
 import { AuthorizationServer, DateInterval, AuthorizationServerOptions } from "@jmondi/oauth2-server";
 import { handleExpressError, handleExpressResponse } from "@jmondi/oauth2-server/express";
@@ -18,6 +19,9 @@ import {MagicLinkTokenRepository} from "./repositories/magic_link_token_reposito
 import {Scope} from "./entities/scope";
 import { clearSession, readSession, setSession } from "./utils/session.js";
 import { linkSentPage, loginFailedPage, loginPage } from "./views.js";
+
+
+const log: Logger<ILogObj> = new Logger();
 
 // Only redirect back to https URLs on our own domain — prevents the login
 // flow from being abused as an open redirect.
@@ -152,8 +156,8 @@ async function bootstrap() {
             // The login flow always authenticates against the internal SSO client.
             const user = await userRepository.getUserByEmail(email);
             const client = await clientRepository.getByIdentifier(SSO_CLIENT_ID);
-            console.log(
-                `[DEBUG] /auth/magic-link/send email=${email} user=${user ? user.id : "null"} ` +
+            log.debug(
+                `/auth/magic-link/send email=${email} user=${user ? user.id : "null"} ` +
                 `client=${client ? client.id : "null"}`,
             );
 
@@ -169,7 +173,7 @@ async function bootstrap() {
                 }
                 const magicLink =
                     `${redirects[0]}?token=${token.code}&redirect=${encodeURIComponent(redirect)}`;
-                console.log("[DEBUG] /auth/magic-link/send: magicLink=", magicLink);
+                log.debug("/auth/magic-link/send: magicLink=", magicLink);
 
                 // Send email
                 // await emailService.send({
@@ -221,7 +225,7 @@ async function bootstrap() {
             });
             return res.redirect(redirect);
         } catch (e) {
-            console.error("[DEBUG] /callback error", e);
+            log.error("/callback error", e);
             return res.status(401).type("html").send(loginFailedPage());
         }
     });
@@ -258,7 +262,7 @@ async function bootstrap() {
             res.setHeader("X-User-Roles", roles.join(","));
             return res.status(200).end();
         } catch (e) {
-            console.error("[DEBUG] /auth/verify error", e);
+            log.error("/auth/verify error", e);
             return toLogin();
         }
     });
@@ -297,7 +301,7 @@ async function bootstrap() {
     });
 
     app.listen(3000);
-    console.log(`[INFO] app is listening on ${env("APP_URL")}`);
+    log.info(`app is listening on ${env("APP_URL")}`);
 }
 
-bootstrap().catch(console.log);
+bootstrap().catch((e) => log.error("bootstrap failed", e));

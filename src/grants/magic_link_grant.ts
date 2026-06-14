@@ -14,6 +14,10 @@ import {JwtInterface} from "@jmondi/oauth2-server/src/utils/jwt";
 import {AuthorizationServerOptions} from "@jmondi/oauth2-server/src/authorization_server";
 import {UserRepository} from "../repositories/user_repository";
 import {ClientRepository} from "../repositories/client_repository";
+import { Logger, ILogObj } from "tslog";
+
+
+const log: Logger<ILogObj> = new Logger();
 
 export class MagicLinkGrant extends AbstractGrant {
 
@@ -41,7 +45,7 @@ export class MagicLinkGrant extends AbstractGrant {
     async respondToAccessTokenRequest(req: RequestInterface) {
 
         // Validate client
-        console.log("[DEBUG] MagicLinkGrant.respondToAccessTokenRequest Validating client: ", JSON.stringify(req.body));
+        log.debug("MagicLinkGrant.respondToAccessTokenRequest Validating client: ", JSON.stringify(req.body));
         await this.validateClient(req);
 
         // Get the token from request
@@ -76,23 +80,23 @@ export class MagicLinkGrant extends AbstractGrant {
         // 3. Return the associated user
         // 4. Invalidate the token after use
 
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Verifying magic token: ", token);
+        log.debug("MagicLinkGrant.verifyMagicToken Verifying magic token: ", token);
         const magicToken = await this.magicLinkTokenRepository.getByIdentifier(token);
 
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Magic token found: ", !!magicToken);
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Magic token expired: ", magicToken?.isExpired);
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Magic token userId: ", magicToken?.userId);
+        log.debug("MagicLinkGrant.verifyMagicToken Magic token found: ", !!magicToken);
+        log.debug("MagicLinkGrant.verifyMagicToken Magic token expired: ", magicToken?.isExpired);
+        log.debug("MagicLinkGrant.verifyMagicToken Magic token userId: ", magicToken?.userId);
 
         if (!magicToken || magicToken.isExpired || !magicToken.userId) {
-            console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Token verification failed - returning null");
+            log.debug("MagicLinkGrant.verifyMagicToken Token verification failed - returning null");
             return null;
         }
 
         const client = await this._clientRepository.getByIdentifier(magicToken.clientId);
         const user = await this.userRepository.getUserByCredentials(magicToken.userId);
 
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken Client found: ", !!client);
-        console.log("[DEBUG] MagicLinkGrant.verifyMagicToken User found: ", !!user);
+        log.debug("MagicLinkGrant.verifyMagicToken Client found: ", !!client);
+        log.debug("MagicLinkGrant.verifyMagicToken User found: ", !!user);
 
         // Delete token after verification (single use)
         await this.magicLinkTokenRepository.delete(magicToken.code);

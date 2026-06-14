@@ -35,6 +35,9 @@ importers:
       mariadb:
         specifier: ^3.4.5
         version: 3.4.5
+      tslog:
+        specifier: ^4.10.2
+        version: 4.10.2
     devDependencies:
       '@types/body-parser':
         specifier: ^1.19.6
@@ -922,6 +925,10 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
+
+  tslog@4.10.2:
+    resolution: {integrity: sha512-XuELoRpMR+sq8fuWwX7P0bcj+PRNiicOKDEb3fGNURhxWVyykCi9BNq7c4uVz7h7P0sj8qgBsr5SWS6yBClq3g==}
+    engines: {node: '>=16'}
 
   tsx@4.21.0:
     resolution: {integrity: sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw==}
@@ -1844,6 +1851,8 @@ snapshots:
   tinyexec@1.0.2: {}
 
   toidentifier@1.0.1: {}
+
+  tslog@4.10.2: {}
 
   tsx@4.21.0:
     dependencies:
