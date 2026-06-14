@@ -149,6 +149,9 @@ async function bootstrap() {
             const redirect = safeRedirect(
                 typeof req.body?.redirect === "string" ? req.body.redirect : undefined,
             );
+            // Log entry before any DB work so a failing lookup below is still
+            // traceable — otherwise a thrown query leaves no record the handler ran.
+            log.debug(`/auth/magic-link/send: received email=${email || "(empty)"}`);
             if (!email) {
                 return res.status(400).json({ error: "email is required" });
             }
@@ -186,8 +189,12 @@ async function bootstrap() {
             // Always the same response — don't reveal whether the email is a member.
             return res.type("html").send(linkSentPage(email));
         } catch (e) {
-            handleExpressError(e, res);
-            return;
+            // handleExpressError only formats OAuthErrors and re-throws anything
+            // else (e.g. DB errors), which would silently surface as a bare 500.
+            // Log it and keep the uniform response so we don't reveal internals.
+            log.error("/auth/magic-link/send error", e);
+            const email = typeof req.body?.email === "string" ? req.body.email.trim() : "";
+            return res.type("html").send(linkSentPage(email));
         }
     });
 
