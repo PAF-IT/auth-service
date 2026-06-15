@@ -125,7 +125,7 @@ async function bootstrap() {
     //         // You will probably want to redirect the user at this point to a login endpoint.
     //
     //         // Once the user has logged in set the user on the AuthorizationRequest
-    //         console.log("Once the user has logged in set the user on the AuthorizationRequest");
+    //         log.debug("Once the user has logged in set the user on the AuthorizationRequest");
     //         authRequest.user = { id: "abc", email: "user@example.com" };
     //
     //         // At this point you should redirect the user to an authorization page.

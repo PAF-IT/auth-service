@@ -10,4 +10,3 @@ spec:
       protocol: TCP
   selector:
     app: auth-service
-  clusterIP: None

@@ -4,7 +4,10 @@ import {MagicLinkToken} from "../entities/magic_link_token";
 import {Client} from "../entities/client";
 import {User} from "../entities/user";
 import {Scope} from "../entities/scope";
+import { Logger, ILogObj } from "tslog";
 
+
+const log: Logger<ILogObj> = new Logger();
 
 export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
     constructor(private readonly prisma: PrismaClient) {}
@@ -25,7 +28,7 @@ export class MagicLinkTokenRepository implements OAuthAuthCodeRepository {
         });
 
         if (!entity) {
-            console.info("MagicLinkTokenRepository.getByIdentifier: code '"+code+ "' not found");
+            log.info("MagicLinkTokenRepository.getByIdentifier: code '"+code+ "' not found");
             // TODO: fix return type issue instead of @ts-ignore it!
             // @ts-ignore
             return null;
