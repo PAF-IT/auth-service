@@ -60,7 +60,12 @@ async function bootstrap() {
         password: env("MYSQL_PASSWORD"),
         database: env("MYSQL_DB_NAME"),
         port: parseInt(env("MYSQL_PORT") || '3306'),
-        connectionLimit: 10
+        connectionLimit: 10,
+        // The shared MySQL 8 server authenticates this user with
+        // caching_sha2_password. Over a non-TLS connection the mariadb driver
+        // won't fetch the server's RSA public key unless we opt in, so every
+        // connection attempt fails and the pool times out (active=0 idle=0).
+        allowPublicKeyRetrieval: true
     });
     const prisma = new PrismaClient({adapter});
     const clientRepository = new ClientRepository(prisma);

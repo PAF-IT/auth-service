@@ -51,6 +51,8 @@ async function main() {
     database: process.env.MYSQL_DB_NAME,
     port: parseInt(process.env.MYSQL_PORT || "3306"),
     connectionLimit: 2,
+    // caching_sha2_password over non-TLS needs RSA public key retrieval.
+    allowPublicKeyRetrieval: true,
   });
   const prisma = new PrismaClient({adapter});
 
