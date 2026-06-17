@@ -17,9 +17,10 @@ generator client {
 // tell a view from a table; any `CREATE TABLE members` it suggests must be
 // stripped from generated migrations.
 model Member {
-  id    Int    @id @db.UnsignedInt
-  email String @db.VarChar(128)
-  name  String @db.VarChar(128)
+  id         Int    @id @db.UnsignedInt
+  email      String @db.VarChar(128)
+  name       String @db.VarChar(128)
+  sci_member Int    @db.TinyInt
 
   @@map("members")
 }

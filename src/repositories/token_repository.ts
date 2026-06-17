@@ -1,13 +1,18 @@
 import { PrismaClient } from "../../generated/prisma/client.js";
 import { DateInterval, generateRandomToken, OAuthClient, OAuthTokenRepository } from "@jmondi/oauth2-server";
+import { Logger, ILogObj } from "tslog";
 
 import { Client } from "../entities/client.js";
 import { Scope } from "../entities/scope.js";
 import { Token } from "../entities/token.js";
 import { User } from "../entities/user.js";
 
+
+const log: Logger<ILogObj> = new Logger();
+
 export class TokenRepository implements OAuthTokenRepository {
   constructor(private readonly prisma: PrismaClient) {}
+
 
   async getByAccessToken(accessToken: string): Promise<Token> {
     const token = await this.prisma.oAuthToken.findUnique({
@@ -25,7 +30,7 @@ export class TokenRepository implements OAuthTokenRepository {
     });
 
     if(!token) {
-      console.info("TokenRepository.getByAccessToken: token '" + accessToken + "' not found");
+      log.info("TokenRepository.getByAccessToken: token '" + accessToken + "' not found");
       // TODO: fix return type issue instead of @ts-ignore it!
       // @ts-ignore
       return null;
@@ -79,7 +84,7 @@ export class TokenRepository implements OAuthTokenRepository {
     });
 
     if (!token) {
-      console.info("TokenRepository.getByRefreshToken: token '" + refreshToken + "' not found");
+      log.info("TokenRepository.getByRefreshToken: token '" + refreshToken + "' not found");
       // TODO: fix return type issue instead of @ts-ignore it!
       // @ts-ignore
       return null;

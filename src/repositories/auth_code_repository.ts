@@ -4,6 +4,10 @@ import { AuthCode } from "../entities/auth_code";
 import { Client } from "../entities/client";
 import { Scope } from "../entities/scope";
 import { User } from "../entities/user";
+import { Logger, ILogObj } from "tslog";
+
+
+const log: Logger<ILogObj> = new Logger();
 
 export class AuthCodeRepository implements OAuthAuthCodeRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -24,7 +28,7 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
     });
 
     if (!entity) {
-      console.info("AuthCodeRepository.getByIdentifier: authCodeCode '"+authCodeCode+ "' not found");
+      log.debug("AuthCodeRepository.getByIdentifier: authCodeCode '"+authCodeCode+ "' not found");
       // TODO: fix return type issue instead of @ts-ignore it!
       // @ts-ignore
       return null;

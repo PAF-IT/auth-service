@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -47,13 +47,13 @@ jobs:
       name: default
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set kubectl Context
-        uses: azure/k8s-set-context@v4
+        uses: azure/k8s-set-context@v5
         with:
           method: kubeconfig
-          kubeconfig: ${{ secrets.UPCLOUD_KUBECONFIG_GATEWAY_TEST }}
+          kubeconfig: ${{ secrets.UPCLOUD_KUBECONFIG_PAF_IT_V2 }}
           context: ${{ env.KUBE_NAMESPACE }}
 
       - name: Deploy to Kubernetes
@@ -61,6 +61,7 @@ jobs:
         with:
           k8-config-file-paths: |
             k8s/auth-service-configmap.yaml
+            k8s/auth-service-service.yaml
             k8s/auth-service-deployment.yaml
           replacement-method: defined
           namespace: ${{ env.KUBE_NAMESPACE }}
@@ -70,3 +71,5 @@ jobs:
           AUTH_SERVICE_DATABASE_PASSWORD: ${{ secrets.AUTH_SERVICE_DATABASE_PASSWORD }}
           AUTH_SERVICE_DATABASE_NAME: ${{ secrets.AUTH_SERVICE_DATABASE_NAME }}
           AUTH_SERVICE_OAUTH_CODES_SECRET: ${{ secrets.OAUTH_CODES_SECRET }}
+          AUTH_SERVICE_COOKIE_SECRET: ${{ secrets.AUTH_SERVICE_COOKIE_SECRET }}
+          AUTH_SERVICE_SSO_CLIENT_SECRET: ${{ secrets.AUTH_SERVICE_SSO_CLIENT_SECRET }}

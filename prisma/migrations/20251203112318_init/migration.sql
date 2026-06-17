@@ -1,15 +1,4 @@
 -- CreateTable
-CREATE TABLE `User` (
-    `id` VARCHAR(32) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
-    `passwordHash` VARCHAR(255) NOT NULL,
-
-    UNIQUE INDEX `User_email_key`(`email`),
-    INDEX `idx_user_email`(`email`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `OAuthClient` (
     `id` VARCHAR(32) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
@@ -101,16 +90,10 @@ ALTER TABLE `oauthClient_oauthScope` ADD CONSTRAINT `oauthClient_oauthScope_clie
 ALTER TABLE `oauthClient_oauthScope` ADD CONSTRAINT `oauthClient_oauthScope_scopeId_fkey` FOREIGN KEY (`scopeId`) REFERENCES `OAuthScope`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `OAuthAuthCode` ADD CONSTRAINT `OAuthAuthCode_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `OAuthAuthCode` ADD CONSTRAINT `OAuthAuthCode_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `OAuthClient`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `OAuthToken` ADD CONSTRAINT `OAuthToken_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `OAuthClient`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `OAuthToken` ADD CONSTRAINT `OAuthToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_OAuthClientToOAuthScope` ADD CONSTRAINT `_OAuthClientToOAuthScope_A_fkey` FOREIGN KEY (`A`) REFERENCES `OAuthClient`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
