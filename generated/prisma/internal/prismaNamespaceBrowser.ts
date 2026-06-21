@@ -79,7 +79,7 @@ export const MemberScalarFieldEnum = {
   id: 'id',
   email: 'email',
   name: 'name',
-  sci_member: 'sci_member'
+  roles: 'roles'
 } as const
 
 export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
@@ -152,14 +152,6 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-export const MemberOrderByRelevanceFieldEnum = {
-  email: 'email',
-  name: 'name'
-} as const
-
-export type MemberOrderByRelevanceFieldEnum = (typeof MemberOrderByRelevanceFieldEnum)[keyof typeof MemberOrderByRelevanceFieldEnum]
-
-
 export const JsonNullValueFilter = {
   DbNull: 'DbNull',
   JsonNull: 'JsonNull',
@@ -175,6 +167,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const MemberOrderByRelevanceFieldEnum = {
+  email: 'email',
+  name: 'name'
+} as const
+
+export type MemberOrderByRelevanceFieldEnum = (typeof MemberOrderByRelevanceFieldEnum)[keyof typeof MemberOrderByRelevanceFieldEnum]
 
 
 export const NullsOrder = {

@@ -14,7 +14,7 @@ function coerceArray(value: Prisma.JsonValue): unknown[] {
   return [];
 }
 
-export function parseRedirectUris(value: Prisma.JsonValue): string[] {
+export function parseJsonStringArray(value: Prisma.JsonValue): string[] {
   return coerceArray(value).filter((v): v is string => typeof v === "string");
 }
 

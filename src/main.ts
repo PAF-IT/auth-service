@@ -165,7 +165,7 @@ async function bootstrap() {
             const user = await userRepository.getUserByEmail(email);
             const client = await clientRepository.getByIdentifier(SSO_CLIENT_ID);
             log.debug(
-                `/auth/magic-link/send email=${email} user=${user ? user.id : "null"} ` +
+                `/auth/magic-link/send: email=${email} user=${user ? user.id : "null"} ` +
                 `client=${client ? client.id : "null"}`,
             );
 
