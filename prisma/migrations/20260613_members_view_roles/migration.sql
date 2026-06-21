@@ -11,4 +11,4 @@
 -- CREATE OR REPLACE VIEW. DB name is literally `paf-admin` (hyphen) -> backtick-quote.
 
 CREATE OR REPLACE VIEW `members` AS
-  SELECT `id`, `email`, `name`, `sci_member` FROM `paf-admin`.`members`;
+  SELECT `id`, `email`, `name`, `roles` FROM `paf-admin`.`members`;

@@ -2,7 +2,7 @@ import { PrismaClient } from "../../generated/prisma/client.js";
 import { GrantIdentifier, OAuthClient, OAuthClientRepository } from "@jmondi/oauth2-server";
 
 import { Client } from "../entities/client.js";
-import { parseAllowedGrants, parseRedirectUris } from "../utils/prisma-helpers.js";
+import { parseAllowedGrants, parseJsonStringArray } from "../utils/prisma-helpers.js";
 import { Logger, ILogObj } from "tslog";
 
 
@@ -12,7 +12,7 @@ export class ClientRepository implements OAuthClientRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async getByIdentifier(clientId: string): Promise<Client> {
-    log.debug("[DEBUG] ClientRepository.getByIdentifier: client '" +clientId+ "'");
+    log.debug("ClientRepository.getByIdentifier: client '" +clientId+ "'");
     const dbClient = await this.prisma.oAuthClient.findUnique({
       where: {
         id: clientId,
@@ -23,7 +23,7 @@ export class ClientRepository implements OAuthClientRepository {
     });
 
     if (!dbClient) {
-      log.debug("[DEBUG] ClientRepository.getByIdentifier: client '" +clientId+ "' not found");
+      log.debug("ClientRepository.getByIdentifier: client '" +clientId+ "' not found");
       // TODO: fix return type issue instead of @ts-ignore it!
       // @ts-ignore
       return null;
@@ -33,7 +33,7 @@ export class ClientRepository implements OAuthClientRepository {
       id: dbClient.id,
       name: dbClient.name,
       secret: dbClient.secret,
-      redirectUris: parseRedirectUris(dbClient.redirectUris),
+      redirectUris: parseJsonStringArray(dbClient.redirectUris),
       allowedGrants: parseAllowedGrants(dbClient.allowedGrants),
       scopes: dbClient.scopes.map(s => ({
         name: s.name,
@@ -42,7 +42,7 @@ export class ClientRepository implements OAuthClientRepository {
   }
 
   async isClientValid(grantType: GrantIdentifier, client: OAuthClient, clientSecret?: string): Promise<boolean> {
-    log.debug("[DEBUG] ClientRepository.isClientValid: grantType=" +grantType+ ", client=" + client + " clientSecret=" + clientSecret);
+    log.debug("ClientRepository.isClientValid: grantType=" +grantType+ ", client=" + client + " clientSecret=" + clientSecret);
     if (client.secret && client.secret !== clientSecret) {
       return false;
     }

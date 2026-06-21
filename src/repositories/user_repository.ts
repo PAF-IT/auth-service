@@ -4,6 +4,7 @@ import {PrismaClient} from "../../generated/prisma/client.js";
 import {Client} from "../entities/client.js";
 import {User} from "../entities/user.js";
 import { Logger, ILogObj } from "tslog";
+import { parseJsonStringArray } from "../utils/prisma-helpers.js";
 
 
 const log: Logger<ILogObj> = new Logger();
@@ -28,7 +29,7 @@ export class UserRepository implements OAuthUserRepository {
       return null;
     }
 
-    return new User({id: String(member.id), email: member.email, sciMember: !!member.sci_member});
+    return new User({id: String(member.id), email: member.email, roles: parseJsonStringArray(member.roles)});
   }
 
   async getUserByEmail(email: string): Promise<User> {
@@ -40,6 +41,6 @@ export class UserRepository implements OAuthUserRepository {
       return null;
     }
 
-    return new User({id: String(member.id), email: member.email, sciMember: !!member.sci_member});
+    return new User({id: String(member.id), email: member.email, roles: parseJsonStringArray(member.roles)});
   }
 }

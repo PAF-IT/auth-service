@@ -28,66 +28,58 @@ export type AggregateMember = {
 
 export type MemberAvgAggregateOutputType = {
   id: number | null
-  sci_member: number | null
 }
 
 export type MemberSumAggregateOutputType = {
   id: number | null
-  sci_member: number | null
 }
 
 export type MemberMinAggregateOutputType = {
   id: number | null
   email: string | null
   name: string | null
-  sci_member: number | null
 }
 
 export type MemberMaxAggregateOutputType = {
   id: number | null
   email: string | null
   name: string | null
-  sci_member: number | null
 }
 
 export type MemberCountAggregateOutputType = {
   id: number
   email: number
   name: number
-  sci_member: number
+  roles: number
   _all: number
 }
 
 
 export type MemberAvgAggregateInputType = {
   id?: true
-  sci_member?: true
 }
 
 export type MemberSumAggregateInputType = {
   id?: true
-  sci_member?: true
 }
 
 export type MemberMinAggregateInputType = {
   id?: true
   email?: true
   name?: true
-  sci_member?: true
 }
 
 export type MemberMaxAggregateInputType = {
   id?: true
   email?: true
   name?: true
-  sci_member?: true
 }
 
 export type MemberCountAggregateInputType = {
   id?: true
   email?: true
   name?: true
-  sci_member?: true
+  roles?: true
   _all?: true
 }
 
@@ -181,7 +173,7 @@ export type MemberGroupByOutputType = {
   id: number
   email: string
   name: string
-  sci_member: number
+  roles: runtime.JsonValue
   _count: MemberCountAggregateOutputType | null
   _avg: MemberAvgAggregateOutputType | null
   _sum: MemberSumAggregateOutputType | null
@@ -211,14 +203,14 @@ export type MemberWhereInput = {
   id?: Prisma.IntFilter<"Member"> | number
   email?: Prisma.StringFilter<"Member"> | string
   name?: Prisma.StringFilter<"Member"> | string
-  sci_member?: Prisma.IntFilter<"Member"> | number
+  roles?: Prisma.JsonFilter<"Member">
 }
 
 export type MemberOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   _relevance?: Prisma.MemberOrderByRelevanceInput
 }
 
@@ -229,14 +221,14 @@ export type MemberWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MemberWhereInput | Prisma.MemberWhereInput[]
   email?: Prisma.StringFilter<"Member"> | string
   name?: Prisma.StringFilter<"Member"> | string
-  sci_member?: Prisma.IntFilter<"Member"> | number
+  roles?: Prisma.JsonFilter<"Member">
 }, "id">
 
 export type MemberOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   _count?: Prisma.MemberCountOrderByAggregateInput
   _avg?: Prisma.MemberAvgOrderByAggregateInput
   _max?: Prisma.MemberMaxOrderByAggregateInput
@@ -251,56 +243,56 @@ export type MemberScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Member"> | number
   email?: Prisma.StringWithAggregatesFilter<"Member"> | string
   name?: Prisma.StringWithAggregatesFilter<"Member"> | string
-  sci_member?: Prisma.IntWithAggregatesFilter<"Member"> | number
+  roles?: Prisma.JsonWithAggregatesFilter<"Member">
 }
 
 export type MemberCreateInput = {
   id: number
   email: string
   name: string
-  sci_member: number
+  roles: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberUncheckedCreateInput = {
   id: number
   email: string
   name: string
-  sci_member: number
+  roles: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  sci_member?: Prisma.IntFieldUpdateOperationsInput | number
+  roles?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  sci_member?: Prisma.IntFieldUpdateOperationsInput | number
+  roles?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberCreateManyInput = {
   id: number
   email: string
   name: string
-  sci_member: number
+  roles: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberUpdateManyMutationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  sci_member?: Prisma.IntFieldUpdateOperationsInput | number
+  roles?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  sci_member?: Prisma.IntFieldUpdateOperationsInput | number
+  roles?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type MemberOrderByRelevanceInput = {
@@ -313,31 +305,27 @@ export type MemberCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
 }
 
 export type MemberAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
 }
 
 export type MemberMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
 }
 
 export type MemberMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
 }
 
 export type MemberSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  sci_member?: Prisma.SortOrder
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -358,7 +346,7 @@ export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   email?: boolean
   name?: boolean
-  sci_member?: boolean
+  roles?: boolean
 }, ExtArgs["result"]["member"]>
 
 
@@ -367,10 +355,10 @@ export type MemberSelectScalar = {
   id?: boolean
   email?: boolean
   name?: boolean
-  sci_member?: boolean
+  roles?: boolean
 }
 
-export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "sci_member", ExtArgs["result"]["member"]>
+export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "roles", ExtArgs["result"]["member"]>
 
 export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Member"
@@ -379,7 +367,7 @@ export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: number
     email: string
     name: string
-    sci_member: number
+    roles: runtime.JsonValue
   }, ExtArgs["result"]["member"]>
   composites: {}
 }
@@ -752,7 +740,7 @@ export interface MemberFieldRefs {
   readonly id: Prisma.FieldRef<"Member", 'Int'>
   readonly email: Prisma.FieldRef<"Member", 'String'>
   readonly name: Prisma.FieldRef<"Member", 'String'>
-  readonly sci_member: Prisma.FieldRef<"Member", 'Int'>
+  readonly roles: Prisma.FieldRef<"Member", 'Json'>
 }
     
 
