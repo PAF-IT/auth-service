@@ -22,3 +22,6 @@ data:
   # Internal OAuth client the login flow authenticates against.
   SSO_CLIENT_ID: "sso"
   SSO_CLIENT_SECRET: "${AUTH_SERVICE_SSO_CLIENT_SECRET}"
+
+  GMAIL_USER: "${GMAIL_USER}"
+  GMAIL_APP_PASSWORD: "${GMAIL_APP_PASSWORD}"
