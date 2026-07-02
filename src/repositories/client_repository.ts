@@ -12,7 +12,6 @@ export class ClientRepository implements OAuthClientRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
   async getByIdentifier(clientId: string): Promise<Client> {
-    log.debug("ClientRepository.getByIdentifier: client '" +clientId+ "'");
     const dbClient = await this.prisma.oAuthClient.findUnique({
       where: {
         id: clientId,
@@ -23,7 +22,7 @@ export class ClientRepository implements OAuthClientRepository {
     });
 
     if (!dbClient) {
-      log.debug("ClientRepository.getByIdentifier: client '" +clientId+ "' not found");
+      log.warn("ClientRepository.getByIdentifier: client '" +clientId+ "' not found");
       // TODO: fix return type issue instead of @ts-ignore it!
       // @ts-ignore
       return null;
@@ -42,7 +41,6 @@ export class ClientRepository implements OAuthClientRepository {
   }
 
   async isClientValid(grantType: GrantIdentifier, client: OAuthClient, clientSecret?: string): Promise<boolean> {
-    log.debug("ClientRepository.isClientValid: grantType=" +grantType+ ", client=" + client + " clientSecret=" + clientSecret);
     if (client.secret && client.secret !== clientSecret) {
       return false;
     }

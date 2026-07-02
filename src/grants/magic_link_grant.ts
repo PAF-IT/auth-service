@@ -45,7 +45,6 @@ export class MagicLinkGrant extends AbstractGrant {
     async respondToAccessTokenRequest(req: RequestInterface) {
 
         // Validate client
-        log.debug("MagicLinkGrant.respondToAccessTokenRequest validating client");
         await this.validateClient(req);
 
         // Get the token from request
@@ -80,13 +79,8 @@ export class MagicLinkGrant extends AbstractGrant {
         // 3. Return the associated user
         // 4. Invalidate the token after use
 
-        log.debug("MagicLinkGrant.verifyMagicToken Verifying magic token");
         const magicToken = await this.magicLinkTokenRepository.getByIdentifier(token);
-
-        log.debug("MagicLinkGrant.verifyMagicToken magic token found: ", !!magicToken);
-        log.debug("MagicLinkGrant.verifyMagicToken magic token expired: ", magicToken?.isExpired);
-        log.debug("MagicLinkGrant.verifyMagicToken magic token userId: ", magicToken?.userId);
-
+        
         if (!magicToken || magicToken.isExpired || !magicToken.userId) {
             log.debug("MagicLinkGrant.verifyMagicToken token verification failed - returning null");
             return null;
@@ -94,10 +88,6 @@ export class MagicLinkGrant extends AbstractGrant {
 
         const client = await this._clientRepository.getByIdentifier(magicToken.clientId);
         const user = await this.userRepository.getUserByCredentials(magicToken.userId);
-
-        log.debug("MagicLinkGrant.verifyMagicToken client found: ", !!client);
-        log.debug("MagicLinkGrant.verifyMagicToken user found: ", !!user);
-        log.debug("MagicLinkGrant.verifyMagicToken user roles: ", user?.roles);
 
         // Delete token after verification (single use)
         await this.magicLinkTokenRepository.delete(magicToken.code);
