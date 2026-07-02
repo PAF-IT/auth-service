@@ -45,7 +45,7 @@ export class MagicLinkGrant extends AbstractGrant {
     async respondToAccessTokenRequest(req: RequestInterface) {
 
         // Validate client
-        log.debug("MagicLinkGrant.respondToAccessTokenRequest validating client: ", JSON.stringify(req.body));
+        log.debug("MagicLinkGrant.respondToAccessTokenRequest validating client");
         await this.validateClient(req);
 
         // Get the token from request
@@ -80,7 +80,7 @@ export class MagicLinkGrant extends AbstractGrant {
         // 3. Return the associated user
         // 4. Invalidate the token after use
 
-        log.debug("MagicLinkGrant.verifyMagicToken Vverifying magic token: ", token);
+        log.debug("MagicLinkGrant.verifyMagicToken Verifying magic token");
         const magicToken = await this.magicLinkTokenRepository.getByIdentifier(token);
 
         log.debug("MagicLinkGrant.verifyMagicToken magic token found: ", !!magicToken);

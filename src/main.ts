@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { Logger, ILogObj } from "tslog";
 import Express from "express";
+import nodemailer from "nodemailer";
 import { AuthorizationServer, DateInterval, AuthorizationServerOptions } from "@jmondi/oauth2-server";
 import { handleExpressError, handleExpressResponse } from "@jmondi/oauth2-server/express";
 
@@ -20,8 +21,8 @@ import {Scope} from "./entities/scope";
 import { clearSession, readSession, setSession } from "./utils/session.js";
 import { linkSentPage, loginFailedPage, loginPage } from "./views.js";
 
-
 const log: Logger<ILogObj> = new Logger();
+
 
 // Only redirect back to https URLs on our own domain — prevents the login
 // flow from being abused as an open redirect.
@@ -113,6 +114,24 @@ async function bootstrap() {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser(process.env.COOKIE_SECRET));
 
+    // Create a transporter using SMTP
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        auth: {
+            user: env("GMAIL_USER"),
+            pass: env("GMAIL_APP_PASSWORD"),
+        },
+    });
+
+    // Verify SMTP connection
+    try {
+        await transporter.verify();
+        log.info("bootstrap: SMTP server is ready to take our messages");
+    } catch (err) {
+        log.warn("bootstrap: SMTP verification failed:", err);
+    }
+
     // Login page (unauthenticated). Carries the post-login destination.
     app.get("/login", (req: Express.Request, res: Express.Response) => {
         const redirect = safeRedirect(
@@ -179,16 +198,21 @@ async function bootstrap() {
                 if (!redirects?.length) {
                     throw new Error(`OAuthClient ${client.id} has no redirectUris`);
                 }
-                const magicLink =
-                    `${redirects[0]}?token=${token.code}&redirect=${encodeURIComponent(redirect)}`;
-                log.debug("/auth/magic-link/send: magicLink=", magicLink);
+                const magicLink = `${redirects[0]}?token=${token.code}&redirect=${encodeURIComponent(redirect)}`;
+                log.debug("/auth/magic-link/send: magicLink generated");
 
                 // Send email
-                // await emailService.send({
-                //   to: email,
-                //   subject: "Your magic login link",
-                //   body: `Click here to log in: ${magicLink}`
-                // });
+                try {
+                    const info = await transporter.sendMail({
+                        from: '"PAF IT" <it@pa-f.net>',
+                        to: email,
+                        subject: "PAF login: Your magic login link",
+                        html: `<p>Click <a href="${magicLink}">here to log in</a></p>`
+                    });
+                    log.debug("/auth/magic-link/send: Message sent: %s", info.messageId);
+                } catch (err) {
+                    log.error("/auth/magic-link/send: Error while sending mail:", err);
+                }
             }
 
             // Always the same response — don't reveal whether the email is a member.
