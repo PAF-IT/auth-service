@@ -198,9 +198,8 @@ async function bootstrap() {
                 if (!redirects?.length) {
                     throw new Error(`OAuthClient ${client.id} has no redirectUris`);
                 }
-                const magicLink =
-                    `${redirects[0]}?token=${token.code}&redirect=${encodeURIComponent(redirect)}`;
-                log.debug("/auth/magic-link/send: magicLink=", magicLink);
+                const magicLink = `${redirects[0]}?token=${token.code}&redirect=${encodeURIComponent(redirect)}`;
+                log.debug("/auth/magic-link/send: magicLink generated");
 
                 // Send email
                 try {

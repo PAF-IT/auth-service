@@ -37,8 +37,7 @@ export function loginPage(redirect: string): string {
 export function linkSentPage(email: string): string {
   return page(
     "Check your email",
-    `<p>If <strong>${escapeHtml(email)}</strong> is a registered member, a magic link is on its way.</p>
-     <p class="muted">Staging: the link is also printed in the auth-service pod logs.</p>`,
+    `<p>If <strong>${escapeHtml(email)}</strong> is a registered member, a magic link is on its way.</p>`,
   );
 }
 
