@@ -269,7 +269,10 @@ async function bootstrap() {
     // Gateway ext_authz endpoint. Valid session -> 200 + identity headers that
     // Envoy injects into the upstream request. Otherwise -> 302 to login,
     // carrying the originally-attempted URL.
-    app.get("/auth/verify", async (req: Express.Request, res: Express.Response) => {
+    // Envoy's ext_authz HTTP client uses the configured path as a *prefix* and
+    // appends the original request path (e.g. /auth/verify/editor), so accept
+    // any trailing path segments.
+    app.get("/auth/verify{/*splat}", async (req: Express.Request, res: Express.Response) => {
         const toLogin = () => {
             const loginUrl =
                 `${process.env.AUTH_PUBLIC_URL || ""}/login` +
